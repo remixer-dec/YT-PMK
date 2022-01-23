@@ -9,9 +9,10 @@ This app, based on [Google Apps Script](https://developers.google.com/apps-scrip
 - Notify about changes via Telegram and Firebase Push Notifications  
 - Let you configure desired behavior right in the spreadsheet  
 - Log every performed action to the spreadsheet  
+  
 ![demo](https://i.imgur.com/6Yg5clu.gif)
     
-This app is currently in a beta test phase, click [here](https://script.google.com/home/projects/1MkR_jfmnzQNjfvxbiz-v_1UByepbLU2p23orMLj0N_5RY72ugLiont94/) to join. Please report any errors that you notice!  To run the app you need to click on `Code.gs` and select `main` function. To run it regularly, set up a trigger in the menu. After the first run you can go to your [Google Spreadsheets](https://docs.google.com/spreadsheets/u/0/) and configure the app. By default it only exports your own playlists and reports found changes to the spreadsheet without any modifications to original playlists.
+This app is currently in a beta test phase, click [here](https://script.google.com/home/projects/1MkR_jfmnzQNjfvxbiz-v_1UByepbLU2p23orMLj0N_5RY72ugLiont94/edit) to join. Please report any errors that you notice!  To run the app you need to click on `Code.gs` and select `main` function. To run it regularly, set up a trigger in the menu. After the first run you can go to your [Google Spreadsheets](https://docs.google.com/spreadsheets/u/0/) and configure the app. By default it only exports your own playlists and reports found changes to the spreadsheet without any modifications to original playlists.
 
 #### Configuration options explained
  - tryToRestoreVideosAutomatically - add a restored video to the table and the playlist if one can be found with Search API
