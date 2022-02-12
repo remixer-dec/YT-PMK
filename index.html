@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Playlist Metadata Keeper</title>
+</head>
+<style>
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  padding: 0;
+  background: rgb(157,147,103);
+  background: linear-gradient(90deg, rgba(230,108,89,1) 0%, rgba(180,66,62,1) 50%, rgba(212,81,74,1) 100%); }
+.bird {
+  width: 90%;
+  height: 90%;
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  display: flex;
+}
+.wing {
+  color: #fff;
+  background: #444141;
+  border-radius: 30px;
+  box-shadow: 10px 0 50px 0px rgba(155, 6, 6, 0.4);
+  box-sizing: border-box;
+  padding: 20px 30px;
+  width: 50%;
+  margin: 20px;
+  height: max-content;
+  max-width: 700px;
+}
+.centered {
+  text-align: center;
+}
+img {
+  width: 100%;
+  border-radius: 12px;
+  display: block;
+}
+.button {
+  width: 190px;
+  height: 46px;
+  display: inline-block;
+  vertical-align: middle;
+  user-select: none;
+}
+.signInWithGoogle {
+  background: url(https://developers.google.cn/identity/images/btn_google_signin_dark_normal_web.png);
+  filter: grayscale(1);
+  margin: 12px -2px;
+}
+.customButton {
+  font-weight: 600;
+  background: #7e7e7e;
+  text-align: center;
+  line-height: 40px;
+  border-radius: 2px;
+  box-sizing: border-box;
+  height: 40px;
+  width: 186px;
+  margin: 12px 0px;
+  box-shadow: 0 1px 2px 0 #3e3c3c;
+  font-size: 15px;
+}
+.button:hover {
+  filter: none;
+  cursor: pointer;
+}
+.customButton:hover {
+  background-color: #4285f4;
+}
+h1 {
+  font-size: 28px;
+  margin: 5px 0;
+}
+p  {
+  font-size: 18px;
+  text-align: justify;
+  line-height: 26px;
+  letter-spacing: -.6px;
+  opacity: .8;
+}
+a {
+  color: #fff;
+  font-weight: bold;
+}
+section {
+  display: block;
+  margin: 10px 0;
+}
+label {
+  user-select: none;
+  cursor: pointer;
+  display: block;
+  margin: 5px 0;
+}
+.hidden {
+  height: 0;
+  overflow: hidden;
+}
+.loading {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+.loading:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #fff;
+  border-color: #fff transparent #fff transparent;
+  animation: spin 1.2s linear infinite;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@media screen and (max-width: 800px) {
+  .bird {
+    flex-direction: column;
+  }
+  .wing {
+    width: 100%;
+    margin: 0 0 20px;
+  }
+  .centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+#error {
+  color: red;
+}
+@media screen and (min-width: 1600px) {
+  .wing {
+    margin: 20px auto;
+  }
+}
+
+</style>
+<body>
+  <div class="bird">
+    <div class="wing">
+      <div class="box" state="login">
+        <h1 class="centered">YouTube Playlist Metadata Keeper</h1>
+        <p>A video that you liked or added to a playlist can become unavailable at any moment.
+        And when this happens, you might permanently lose information about the video.</p>
+        <img src="https://i.ytimg.com/vi/D5_RLA5NJAY/maxresdefault.jpg" alt="example">
+        <p>Keeping track of all the playlists and manually checking every video is a waste of time.
+        This script is the solution to all these problems</p><br/>
+      </div>
+      <div class="centered box" state="login">
+        <h1>Get started</h1>
+        <a href="https://script.google.com/macros/s/AKfycbyA9Z_CO6L7Zw8mTwmRhh5NY6RypxZlyUndbIX3Y--Qt8_Y7T369Ymgcp26C5c18Pbqsg/exec"><div class="button signInWithGoogle"></div></a> or 
+        <a href="https://script.google.com/home/projects/1MkR_jfmnzQNjfvxbiz-v_1UByepbLU2p23orMLj0N_5RY72ugLiont94/edit" target="_blank"><div class="button customButton">Launch manually</div></a> or 
+        <a href="https://script.google.com/home/projects/1MkR_jfmnzQNjfvxbiz-v_1UByepbLU2p23orMLj0N_5RY72ugLiont94/triggers" target="_blank"><div class="button customButton">Set up a trigger</div></a>
+      </div>
+      <div class="box" state="setup">
+        <h1>Initial configuration</h1>
+        <b>Check playlists</b>
+        <section>
+          <label><input type="checkbox" checked name="saveLikedVideosPlaylist">Liked videos</label>
+          <label><input type="checkbox" checked name="saveMyPlaylists">My playlists</label>
+        </section><br/>
+        <b>When a video becomes unavailable</b>
+        <section>
+          <label><input type="checkbox" name="tryToRestoreVideosAutomatically">Try to restore* missing video in the playlist via search, based on the name and duration</label>
+          <label><input type="checkbox" name="replaceOldVideosInPlaylist">Remove unavailable video from the playlist if replacement video is found</label>
+          * - will not restore videos in read-only playlists and liked videos
+        </section><br/>
+        <b>Country code to check for region restrictions</b>
+        <section>
+          <input type="text" name="regionRestrictionCountryCode" placeholder="i.e. US or RU or BR..." maxlength="2">
+        </section><br/>
+        <b>Run script</b>
+        <section>
+          <select name="run">
+            <option value="month" selected>Monthly</option>
+            <option value="week">Weekly</option>
+            <option value="once">Once</option>
+          </select>
+        </section>
+        <div class="centered">
+          <div class="button customButton" onclick="saveAndRun()">Save and run</div>
+        </div>
+      </div>
+      <div class="box centered" state="triggers">
+        You have <span id="triggerCount">a</span> trigger(s) that runs the script automatically.<br/>
+        <div id="triggerLink"></div><br/>
+        <div class="button customButton" onclick="run()">Run once manually</div>
+        <div class="button customButton" onclick="removeTriggers()">Remove all triggers</div>
+      </div>
+      <div class="box" state="no-triggers">
+        You don't have a trigger that runs the script automatically.<br/><br/>
+        <div id="noTriggerLink"></div><br/>
+        <select name="run2">
+          <option value="month" selected>Monthly</option>
+          <option value="week">Weekly</option>
+        </select><br/>
+        <div class="button customButton" onclick="addTrigger()">Add a trigger</div>
+        <div class="button customButton" onclick="run()">Run once manually</div>
+      </div>
+      <div class="box centered" state="running">
+        The script is currently running. Please wait.
+        <div id="progress"></div><br/>
+        <div class="loading"></div>
+      </div>
+      <div class="box centered" state="complete" id="complete">
+        Done!
+      </div>
+      <div class="box centered" state="error" id="error">
+        Error!
+      </div>
+    </div>
+    <div class="wing">
+      <h1>How it works?</h1>
+      <p> This is a script, based on <a href="https://developers.google.com/apps-script">Google Apps Script</a> platform. 
+      When you run it, the script checks all your YouTube playlists, and exports the data about the videos in them to your Google Spreadsheet.
+      Later you can edit the configuration right in the spreadsheet, include / exclude other playlists and set up notifications.
+      In the next runs the script will compare the videos from your playlists to previously exported data.</br>
+      Besides this, the script can: <br/>
+    - Find removed, privacy and region restricted videos<br/>
+    - Fill rows with missing videos with certain colors.<br/>
+    - Attempt to restore missing videos from search results, based on original video title and duration (optional)<br/>
+    - Notify about changes via Telegram and Firebase Push Notifications (optional)<br/>
+    - Log every performed action to the spreadsheet <br/>
+      </p><br/>
+      <b>Q&A</b><br/><br/>
+      <b>Q:</b> How much does it cost?<br/>
+      <b>A:</b> You can run it for free, as long as you fit in Google's <a href="https://developers.google.com/apps-script/guides/services/quotas">free quotas</a>. Unless you have playlists with tens of thousands of videos, you will not reach the quota limits. Otherwise you might get quota limit errors.<br/><br/>
+      <b>Q:</b> Is it open source? <br/>
+      <b>A:</b> Yes, <a href="https://github.com/remixer-dec/YT-PMK">it is</a>!<br/><br/>
+      <b>Q:</b> Do I have to set up anything on my computer?<br/>
+      <b>A:</b> No. Just Log in with your Google Account, select initial configuration and run the script! It runs in the cloud on Google's servers.<br/></br>
+      <b>Q:</b> Does this script remove missing videos from the playlists after finding a replacement?<br/>
+      <b>A:</b> Only when you change the configuration to do it. The information about original video in the spreadsheet will never be removed.<br/><br/>
+    </div>
+  </div>
+  <script>
+    const $ = (x) => document.querySelectorAll(x)
+    const setState = (state) => $('.box').forEach(e => e.getAttribute('state') === state ? e.classList.remove('hidden') : e.classList.add('hidden'))
+    setState('login')
+    if (!window.location.origin.match('git')) {
+      if ('google' in window) {
+        loggedIn()
+      }
+    }
+
+    function loggedIn() {
+      google.script.run.withSuccessHandler((spreadsheetID) => {
+        if (!spreadsheetID) {
+          setState('setup')
+        } else {
+          google.script.run.withSuccessHandler((triggers) => {
+            if (triggers) {
+              $('#triggerCount')[0].innerHTML = triggers
+              $('#triggerLink')[0].innerHTML = getSpreadsheetLink(spreadsheetID, "Here's your spreadsheet.")
+              setState('triggers')
+            } else {
+              $('#noTriggerLink')[0].innerHTML = getSpreadsheetLink(spreadsheetID, "Here's your spreadsheet.")
+              setState('no-triggers')
+            }
+          }).getTriggerCount()
+        }
+      }).withFailureHandler(errorHandler).getUsedSpreadsheetID()
+    }
+
+    function saveAndRun() {
+      const config = {};
+      $('input[type=checkbox]').forEach(y => config[y.name] = y.checked)
+      config['regionRestrictionCountryCode'] = $('input[name=regionRestrictionCountryCode]')[0].value
+      const run = $('select[name=run]')[0].value
+      google.script.run
+        .withFailureHandler(errorHandler)
+        .withSuccessHandler(mainCompletionHandler)
+        .configureAndRun({custom: config, once: run === 'once', weekly: run === 'week'});
+      setState('running')
+    }
+
+    function addTrigger() {
+      const run = $('select[name=run2]')[0].value
+      $('#noTriggerLink')[0].innerHTML += '<br/><div class="loading"></div><br/>'
+      google.script.run
+      .withFailureHandler(errorHandler)
+      .withSuccessHandler(() => {
+        setTimeout(loggedIn, 200)
+      }).addTrigger(run === 'week')
+    }
+
+    function errorHandler(e) {
+      console.log(arguments)
+      $('#error')[0].innerHTML = 'Error: <br/>' + JSON.stringify(e) + '<br/>' + e.message
+      setState('error');
+    }
+
+    function getSpreadsheetLink(id, text='') {
+      return `<a target="_blank" href="https://docs.google.com/spreadsheets/d/${id}">${text}</a>`
+    }
+
+    function mainCompletionHandler(id) {
+      if (id) {
+        $('#complete')[0].innerHTML = getSpreadsheetLink(id, "Done. Here's your spreadsheet.")
+      } 
+      setState('complete')
+    }
+
+    function run() {
+      google.script.run
+        .withSuccessHandler(mainCompletionHandler)
+        .withFailureHandler(errorHandler)
+        .mainWrapper();
+      setState('running')
+    }
+
+    function removeTriggers() {
+      $('#triggerLink')[0].innerHTML += '<br/><div class="loading"></div><br/>'
+      google.script.run
+        .withSuccessHandler(() => setTimeout(loggedIn, 200))
+        .withFailureHandler(errorHandler)
+        .removeAllTriggers()
+    }
+  </script>
+</body>
+</html>

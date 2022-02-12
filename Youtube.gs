@@ -23,6 +23,7 @@ function getPlaylistVideos(id) {
     results.items.push(...page.items)
     console.log(`Fetching playlist details (${Math.min(skip, total)}/${total})`)
   }
+  if (id === 'LL') results.items.reverse()
   return results
 }
 

@@ -62,12 +62,13 @@ class UserConfigDB {
       sheet.setName('[CONFIG]')
       sheet.appendRow(['KEY', 'VALUE']);
       sheet.getRange(1, 1, 1, 2).setFontWeight("bold");
-      for (let key in defaultConfig) {
+      let config = typeof customConfig === 'undefined' ? defaultConfig : {...defaultConfig, ...customConfig}
+      for (let key in config) {
         // true and false values get localized and can lead to unexpected input
-        sheet.appendRow([key, (typeof defaultConfig[key] === "boolean")? defaultConfig[key] ? 'yes' : 'no' : defaultConfig[key]])
+        sheet.appendRow([key, (typeof config[key] === "boolean")? config[key] ? 'yes' : 'no' : config[key]])
       }
       sheet.autoResizeColumns(1, 2);
-      return defaultConfig
+      return config
     } else {
       const range = sheet.getRange(2, 1, 14, 2).getValues()
       range.forEach(el => {el[1] = String(el[1]).match(/yes|no/) ? el[1] === 'yes' : el[1]})

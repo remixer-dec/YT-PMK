@@ -1,3 +1,14 @@
+function mainWrapper() {
+  // allow only 1 parallel execution per user
+  const lock = LockService.getUserLock();
+  const canRun = lock.tryLock(10000);
+  if (canRun) {
+    main()
+    lock.releaseLock()
+    return new DB().spreadsheetID
+  } else return false
+}
+
 function setRow(n, values) {
   this.getRange(n, 1, 1, values.length) // start row, start column, number of rows, number of columns
       .setValues([values]);
