@@ -16,6 +16,7 @@ function createActionHistoryTable(spreadsheet) {
   const table = spreadsheet.insertSheet('[LOG]')
   const header = ["DATE", "EVENT", "TARGET ID", "OLD VALUE", "NEW VALUE"]
   table.appendRow(header)
+  table.getRange(1, 1, 1, header.length).setFontWeight("bold");
   return table
 }
 
@@ -66,8 +67,8 @@ function processRowsFromVideos(videos, table) {
   SpreadsheetApp.flush()
 }
 
-function createPlaylistTable(playlist, spreadsheet) {
-  const table = spreadsheet.insertSheet(playlist.snippet.title)
+function createPlaylistTable(playlist, spreadsheet, name) {
+  const table = spreadsheet.insertSheet(name, 4)
   const header = ["PREVIEW", "TITLE", "CHANNEL", "DURATION", "ID", "STATUS", "TYPE"]
   table.appendRow(header)
   table.getRange(1,1,1, header.length).setFontWeight("bold")
@@ -163,6 +164,7 @@ function main() {
   logTable = spreadsheet.getSheetByName('[LOG]') || createActionHistoryTable(spreadsheet)
   logAction('Script execution started')
   let tableNames = new Set(spreadsheet.getSheets().map(sheet => sheet.getSheetName()))
+  let stats = new Stats(spreadsheet)
   let myPlaylists =  []
   if (userConfig.saveMyPlaylists) {
     myPlaylists = getMyPlaylists().items
@@ -186,13 +188,14 @@ function main() {
   }
 
   myPlaylists.forEach((playlist, index) => {
-    if (tableNames.has(playlist.snippet.title)) {
+    const playlistName = stats.getSheetNameByPlaylistId(playlist.id, playlist.snippet.title)
+    if (tableNames.has(playlistName)) {
       console.log('Checking playlist', (index + 1) + '/' + myPlaylists.length)
-      checkPlaylistTable(playlist, spreadsheet.getSheetByName(playlist.snippet.title))
+      checkPlaylistTable(playlist, spreadsheet.getSheetByName(playlistName))
     } else {
       console.log('Adding playlist', (index + 1) + '/' + myPlaylists.length)
-      logAction('Adding new playlist to the table', playlist.id, '', playlist.snippet.title)
-      createPlaylistTable(playlist, spreadsheet)
+      logAction('Adding new playlist to the table', playlist.id, '', playlistName)
+      createPlaylistTable(playlist, spreadsheet, playlistName)
     }
   })
   logAction('Script execution ended')

@@ -1,7 +1,7 @@
 
 #  YouTube Playlist Metadata Keeper
 
-This app, based on [Google Apps Script](https://developers.google.com/apps-script/) can 
+This [app](https://remixer-dec.github.io/YT-PMK/), based on [Google Apps Script](https://developers.google.com/apps-script/) can 
 - Export YouTube playlist details to a Google Spreadsheet  
 - Compare playlists with previously exported data  
 - Find removed, privacy and region restricted videos  
@@ -21,7 +21,6 @@ This app is currently in a open beta test phase, click [here](https://remixer-de
 
 #### Limitations: 
 Due to API Limits you cannot save viewing history, saved playlists and "Watch Later".  
-Currently playlist is linked to a sheet with its name, so renaming the playlist will create a new sheet for it.
 
 Unless you have multiple playlists with tens of thousands of videos, you should be able to run it at no cost with Google's infrastructure using free quotas, otherwise you might face execution time limit or YouTube API rate limits.
 
